@@ -1,13 +1,9 @@
-Here's the complete MVP spec:
-
----
-
 # 🖤 Prompt Catalog MVP — Full Spec
 
 ## Stack
 
 | Layer | Choice |
-|---|---|
+| --- | --- |
 | **Frontend** | Next.js (App Router) + TypeScript |
 | **Styling** | Tailwind CSS + shadcn/ui + Lucide Icons |
 | **Auth** | Clerk |
@@ -32,7 +28,7 @@ Here's the complete MVP spec:
 
 ### Categories & Subcategories
 
-```
+```text
 /prompts/pod/tshirts
 /prompts/pod/stickers
 /prompts/pod/mockups
@@ -76,7 +72,7 @@ Here's the complete MVP spec:
 ## Monetization
 
 | Type | Price |
-|---|---|
+| --- | --- |
 | Single prompt unlock | $2.99 |
 | Full category pack | $14.99 |
 
@@ -97,7 +93,7 @@ Here's the complete MVP spec:
 ## SEO Strategy
 
 | Feature | Implementation |
-|---|---|
+| --- | --- |
 | Rendering | ISR (Incremental Static Regeneration) |
 | URLs | `/prompts/[category]/[subcategory]/[slug]` |
 | Sitemap | Dynamic `sitemap.xml` from Convex catalog |
