@@ -147,4 +147,3 @@
 
 ---
 
-Ready for `/init-project`?
