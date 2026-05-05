@@ -128,3 +128,10 @@
     @apply font-sans;
   }
 }
+
+/* Promptita design tokens */
+:root {
+  --card-warm: #f9f7f4;
+  --border-light: #e8e4df;
+  --font-logo: var(--font-dancing);
+}
