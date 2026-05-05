@@ -7,7 +7,7 @@ import { ImageViewer } from "@/components/prompts/image-viewer";
 export const revalidate = 3600;
 
 interface Props {
-  params: { category: string; subcategory: string; slug: string };
+  params: Promise<{ category: string; subcategory: string; slug: string }>;
 }
 
 export async function generateStaticParams() {
@@ -16,7 +16,8 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props) {
-  const prompt = await fetchQuery(api.prompts.getBySlug, { slug: params.slug });
+  const resolvedParams = await params;
+  const prompt = await fetchQuery(api.prompts.getBySlug, { slug: resolvedParams.slug });
   if (!prompt) return {};
   return {
     title: `${prompt.title} — Promptita`,
@@ -26,7 +27,8 @@ export async function generateMetadata({ params }: Props) {
 }
 
 export default async function PromptPage({ params }: Props) {
-  const prompt = await fetchQuery(api.prompts.getBySlug, { slug: params.slug });
+  const resolvedParams = await params;
+  const prompt = await fetchQuery(api.prompts.getBySlug, { slug: resolvedParams.slug });
   if (!prompt) notFound();
 
   const imageUrl = await fetchQuery(api.prompts.getImageUrl, {

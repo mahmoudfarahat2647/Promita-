@@ -32,30 +32,34 @@ export function PromptCard({ prompt, onClick }: PromptCardProps) {
 
   return (
     <div
-      className="bg-[#f9f7f4] border border-[#e8e4df] rounded-xl overflow-hidden cursor-pointer hover:shadow-[0_4px_20px_rgba(0,0,0,0.08)] transition-shadow"
+      className="bg-[var(--card-warm)] border border-[var(--border-light)] rounded-lg overflow-hidden cursor-pointer hover-lift-shadow group flex flex-col"
       onClick={() => onClick(prompt._id)}
     >
-      <div className="relative aspect-[4/3] bg-[#f0ece6]">
-        <ImageViewer src={prompt.imageUrl} alt={prompt.title} />
-        <span className="absolute top-2 left-2 bg-black text-white text-[11px] font-medium uppercase tracking-wide px-2.5 py-0.5 rounded-full">
+      <div className="relative aspect-[4/5] bg-[var(--secondary)] overflow-hidden">
+        <ImageViewer 
+          src={prompt.imageUrl} 
+          alt={prompt.title} 
+          className="group-hover:scale-105 transition-transform duration-700 ease-out" 
+        />
+        <span className="absolute top-3 left-3 bg-black text-white text-[11px] font-semibold uppercase tracking-widest px-3 py-1 rounded-full shadow-sm">
           {prompt.isFree ? "FREE" : `$${prompt.price.toFixed(2)}`}
         </span>
         <button
-          className="absolute bottom-2 right-2 flex items-center gap-1 text-sm"
+          className="absolute bottom-3 right-3 flex items-center gap-1.5 bg-white/90 backdrop-blur-md px-2.5 py-1 rounded-full shadow-sm hover:bg-white transition-colors"
           onClick={handleLike}
         >
           <Heart
             className={cn(
-              "w-4 h-4",
+              "w-4 h-4 transition-colors",
               liked ? "fill-black text-black" : "text-black"
             )}
           />
-          <span className="text-black text-xs font-medium">{likes}</span>
+          <span className="text-black text-xs font-semibold">{likes}</span>
         </button>
       </div>
-      <div className="p-3">
-        <p className="text-sm font-semibold text-black truncate">{prompt.title}</p>
-        <p className="text-xs text-gray-400 truncate mt-0.5">{prompt.description}</p>
+      <div className="p-4 flex flex-col gap-0.5">
+        <p className="text-[14px] font-bold text-black truncate">{prompt.title}</p>
+        <p className="text-[12px] text-gray-500 truncate">{prompt.description}</p>
       </div>
     </div>
   );

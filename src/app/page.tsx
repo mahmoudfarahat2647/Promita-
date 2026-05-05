@@ -17,10 +17,9 @@ export default async function HomePage() {
     Promise.all(
       prompts.map(async (p: (typeof featuredRaw)[number]) => ({
         ...p,
-        imageUrl:
-          (await fetchQuery(api.prompts.getImageUrl, {
-            storageId: p.imageStorageId,
-          })) ?? "/placeholder.png",
+        imageUrl: p.imageStorageId
+          ? await fetchQuery(api.prompts.getImageUrl, { storageId: p.imageStorageId })
+          : "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&q=80",
       }))
     );
 
@@ -51,7 +50,12 @@ export default async function HomePage() {
         </section>
 
         <section>
-          <h2 className="text-xl font-bold text-black mb-6">Free Prompts</h2>
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-bold text-black">Free Prompts</h2>
+            <a href="/search?isFree=true" className="text-sm text-gray-500 hover:text-black flex items-center gap-1">
+              View all →
+            </a>
+          </div>
           <HomepagePrompts prompts={free as any} />
         </section>
       </main>

@@ -4,7 +4,9 @@ let initialized = false;
 
 export function initPosthog() {
   if (initialized || typeof window === "undefined") return;
-  posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY!, {
+  const key = process.env.NEXT_PUBLIC_POSTHOG_KEY;
+  if (!key) return;
+  posthog.init(key, {
     api_host: "https://app.posthog.com",
     capture_pageview: true,
   });

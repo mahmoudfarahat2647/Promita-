@@ -7,7 +7,7 @@ interface PromptGridProps {
 
 export function PromptGrid({ prompts, onCardClick }: PromptGridProps) {
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 sm:gap-8">
       {prompts.map((p) => (
         <PromptCard key={p._id} prompt={p} onClick={onCardClick} />
       ))}

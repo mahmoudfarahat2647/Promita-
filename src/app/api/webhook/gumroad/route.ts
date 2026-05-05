@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ConvexHttpClient } from "convex/browser";
-import { internal } from "../../../../../convex/_generated/api";
+import { api } from "../../../../../convex/_generated/api";
+import type { Id } from "../../../../../convex/_generated/dataModel";
 import { webhookRatelimit } from "@/lib/upstash";
 import { validateGumroadSellerId } from "@/lib/gumroad";
 
@@ -23,15 +24,17 @@ export async function POST(req: NextRequest) {
   const orderId = body.get("order_id") as string;
   const price = parseFloat((body.get("price") as string) ?? "0") / 100;
   const clerkUserId = body.get("custom_field_clerk_id") as string | null;
-  const promptId = body.get("custom_field_prompt_id") as string | null;
-  const subcategoryId = body.get("custom_field_subcategory_id") as string | null;
+  const promptId = body.get("custom_field_prompt_id") as Id<"prompts"> | null;
+  const subcategoryId =
+    body.get("custom_field_subcategory_id") as Id<"subcategories"> | null;
 
   if (!clerkUserId) {
     return NextResponse.json({ error: "Missing clerk_id" }, { status: 400 });
   }
 
   try {
-    await convex.mutation(internal.webhook.processGumroadPurchase, {
+    await convex.mutation(api.webhook.processGumroadPurchaseFromWebhook, {
+      sellerId,
       gumroadOrderId: orderId,
       clerkUserId,
       promptId: promptId ?? undefined,

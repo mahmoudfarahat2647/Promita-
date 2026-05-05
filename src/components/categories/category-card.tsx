@@ -22,11 +22,11 @@ export function CategoryCard({ name, parentName, icon, href }: CategoryCardProps
     <Link
       href={href}
       className={cn(
-        "flex items-center gap-3 p-4 bg-white border border-[#e8e4df] rounded-xl",
-        "hover:shadow-sm transition-shadow"
+        "flex items-center gap-3 p-4 bg-white border border-[var(--border-light)] rounded-xl",
+        "hover-lift-shadow transition-all duration-300"
       )}
     >
-      <div className="p-2 rounded-lg bg-[#f9f7f4] text-black shrink-0">
+      <div className="p-2 rounded-lg bg-[var(--card-warm)] text-black shrink-0">
         {iconMap[icon] ?? <Shirt className="w-5 h-5" />}
       </div>
       <div className="flex-1 min-w-0">

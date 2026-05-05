@@ -1,5 +1,88 @@
-import { internalMutation } from "./_generated/server";
+import type { Id } from "./_generated/dataModel";
+import { internalMutation, mutation, type MutationCtx } from "./_generated/server";
 import { v } from "convex/values";
+
+async function processPurchase(
+  ctx: MutationCtx,
+  args: {
+    gumroadOrderId: string;
+    clerkUserId: string;
+    promptId?: Id<"prompts">;
+    subcategoryId?: Id<"subcategories">;
+    amount: number;
+  }
+) {
+  const existing = await ctx.db
+    .query("unlocks")
+    .withIndex("by_gumroadOrderId", (q) => q.eq("gumroadOrderId", args.gumroadOrderId))
+    .unique();
+  if (existing) return { alreadyProcessed: true };
+
+  const now = Date.now();
+
+  if (args.promptId) {
+    await ctx.db.insert("unlocks", {
+      userId: args.clerkUserId,
+      promptId: args.promptId,
+      type: "single",
+      gumroadOrderId: args.gumroadOrderId,
+      unlockedAt: now,
+    });
+    await ctx.db.insert("purchases", {
+      userId: args.clerkUserId,
+      type: "single",
+      promptId: args.promptId,
+      amount: args.amount,
+      gumroadOrderId: args.gumroadOrderId,
+      createdAt: now,
+    });
+  } else if (args.subcategoryId) {
+    const prompts = await ctx.db
+      .query("prompts")
+      .withIndex("by_subcategoryId_and_published", (q) =>
+        q.eq("subcategoryId", args.subcategoryId!).eq("isPublished", true)
+      )
+      .take(200);
+    for (const prompt of prompts) {
+      await ctx.db.insert("unlocks", {
+        userId: args.clerkUserId,
+        promptId: prompt._id,
+        subcategoryId: args.subcategoryId,
+        type: "pack",
+        gumroadOrderId: args.gumroadOrderId,
+        unlockedAt: now,
+      });
+    }
+    await ctx.db.insert("purchases", {
+      userId: args.clerkUserId,
+      type: "pack",
+      subcategoryId: args.subcategoryId,
+      amount: args.amount,
+      gumroadOrderId: args.gumroadOrderId,
+      createdAt: now,
+    });
+  }
+
+  return { alreadyProcessed: false };
+}
+
+export const processGumroadPurchaseFromWebhook = mutation({
+  args: {
+    sellerId: v.string(),
+    gumroadOrderId: v.string(),
+    clerkUserId: v.string(),
+    promptId: v.optional(v.id("prompts")),
+    subcategoryId: v.optional(v.id("subcategories")),
+    amount: v.number(),
+  },
+  handler: async (ctx, args) => {
+    if (args.sellerId !== process.env.GUMROAD_SELLER_ID) {
+      throw new Error("Invalid seller");
+    }
+    const { sellerId: _sellerId, ...purchaseArgs } = args;
+    return processPurchase(ctx, purchaseArgs);
+  },
+});
 
 export const processGumroadPurchase = internalMutation({
   args: {
@@ -9,62 +92,5 @@ export const processGumroadPurchase = internalMutation({
     subcategoryId: v.optional(v.id("subcategories")),
     amount: v.number(),
   },
-  handler: async (ctx, args) => {
-    const existing = await ctx.db
-      .query("unlocks")
-      .withIndex("by_gumroadOrderId", (q) =>
-        q.eq("gumroadOrderId", args.gumroadOrderId)
-      )
-      .unique();
-    if (existing) return { alreadyProcessed: true };
-
-    const now = Date.now();
-
-    if (args.promptId) {
-      await ctx.db.insert("unlocks", {
-        userId: args.clerkUserId,
-        promptId: args.promptId,
-        type: "single",
-        gumroadOrderId: args.gumroadOrderId,
-        unlockedAt: now,
-      });
-      await ctx.db.insert("purchases", {
-        userId: args.clerkUserId,
-        type: "single",
-        promptId: args.promptId,
-        amount: args.amount,
-        gumroadOrderId: args.gumroadOrderId,
-        createdAt: now,
-      });
-    } else if (args.subcategoryId) {
-      const prompts = await ctx.db
-        .query("prompts")
-        .withIndex("by_subcategoryId_and_published", (q) =>
-          q
-            .eq("subcategoryId", args.subcategoryId!)
-            .eq("isPublished", true)
-        )
-        .take(200);
-      for (const prompt of prompts) {
-        await ctx.db.insert("unlocks", {
-          userId: args.clerkUserId,
-          promptId: prompt._id,
-          subcategoryId: args.subcategoryId,
-          type: "pack",
-          gumroadOrderId: args.gumroadOrderId,
-          unlockedAt: now,
-        });
-      }
-      await ctx.db.insert("purchases", {
-        userId: args.clerkUserId,
-        type: "pack",
-        subcategoryId: args.subcategoryId,
-        amount: args.amount,
-        gumroadOrderId: args.gumroadOrderId,
-        createdAt: now,
-      });
-    }
-
-    return { alreadyProcessed: false };
-  },
+  handler: async (ctx, args) => processPurchase(ctx, args),
 });

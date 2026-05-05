@@ -14,6 +14,8 @@ interface PromptModalProps {
   onClose: () => void;
 }
 
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+
 export function PromptModal({ promptId, onClose }: PromptModalProps) {
   const promptData = useQuery(api.prompts.getById, { id: promptId });
   const promptText = useQuery(api.prompts.getPromptText, { promptId });
@@ -23,14 +25,6 @@ export function PromptModal({ promptId, onClose }: PromptModalProps) {
       ? { storageId: promptData.imageStorageId }
       : "skip"
   );
-
-  useEffect(() => {
-    function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") onClose();
-    }
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [onClose]);
 
   useEffect(() => {
     if (promptData) {
@@ -43,81 +37,89 @@ export function PromptModal({ promptId, onClose }: PromptModalProps) {
 
   if (!promptData) return null;
 
+  // Simple blur logic for MVP. If it's paid and we don't have text, blur the rest.
+  // Assuming 'promptText' only returns full text if unlocked. Otherwise, we might only get a preview from the backend.
+  // Wait, if it's locked, 'promptText' might be null. The current logic uses 'preview' and 'rest' based on 'promptText'.
+  // If 'promptText' is null, we should show a placeholder or the promptData description as preview.
+  
+  // Actually, let's just show a locked state if promptText is missing and it's not free.
   const isLocked = !promptData.isFree && !promptText;
-  const preview = promptText?.split("\n").slice(0, 2).join("\n") ?? "";
-  const rest = promptText?.split("\n").slice(2).join("\n") ?? "";
+  
+  // If we have text, use it. Otherwise use description as preview.
+  const displayPreview = promptText ? promptText.split("\n").slice(0, 2).join("\n") : promptData.description;
+  const displayRest = promptText ? promptText.split("\n").slice(2).join("\n") : "The rest of this prompt is hidden until unlocked. Purchase to reveal the exact instructions, variables, and parameters used to generate this result.";
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
-      onClick={onClose}
-    >
-      <div
-        className="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl"
-        onClick={(e) => e.stopPropagation()}
-      >
+    <Dialog open={true} onOpenChange={(open) => { if (!open) onClose(); }}>
+      <DialogContent className="max-w-4xl p-0 overflow-hidden bg-white rounded-xl border border-[var(--border-light)] shadow-2xl gap-0">
+        <DialogTitle className="sr-only">{promptData.title}</DialogTitle>
+        <DialogDescription className="sr-only">{promptData.description}</DialogDescription>
+        
         <div className="grid grid-cols-1 md:grid-cols-2">
-          <div className="aspect-square bg-[#f0ece6] rounded-l-2xl overflow-hidden">
+          {/* Left Side: Image */}
+          <div className="relative aspect-square md:aspect-auto md:h-full bg-[#f0ece6] overflow-hidden">
             {imageUrl && (
-              <ImageViewer src={imageUrl} alt={promptData.title} />
+              <ImageViewer src={imageUrl} alt={promptData.title} className="object-cover w-full h-full" />
             )}
+            <div className="absolute top-4 left-4 flex gap-2">
+              <span className="bg-black text-white text-[11px] font-semibold uppercase tracking-widest px-3 py-1 rounded-full shadow-sm">
+                {promptData.isFree ? "FREE" : `$${promptData.price.toFixed(2)}`}
+              </span>
+            </div>
           </div>
-          <div className="p-6 flex flex-col gap-4">
-            <div className="flex items-start justify-between">
-              <div>
-                <p className="text-xs text-gray-400 mb-1">
+
+          {/* Right Side: Details */}
+          <div className="p-8 flex flex-col gap-6 max-h-[85vh] overflow-y-auto">
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center justify-between">
+                <span className="text-[12px] font-medium text-gray-400 uppercase tracking-wider">
                   {promptData.aiTool === "chatgpt" ? "ChatGPT" : "Gemini"}
-                </p>
-                <h2 className="text-xl font-bold text-black">
-                  {promptData.title}
-                </h2>
-                <p className="text-sm text-gray-500 mt-1">
-                  {promptData.description}
-                </p>
+                </span>
+                <LikeButton promptId={promptId} likeCount={promptData.likeCount} />
               </div>
-              <button onClick={onClose} className="text-gray-400 hover:text-black ml-2 shrink-0">
-                <X className="w-5 h-5" />
-              </button>
+              <h2 className="text-2xl font-bold text-black tracking-tight leading-snug">
+                {promptData.title}
+              </h2>
+              <p className="text-[14px] text-gray-500 leading-relaxed">
+                {promptData.description}
+              </p>
             </div>
 
-            <div className="flex gap-2 flex-wrap">
-              <span className="bg-black text-white text-xs px-3 py-1 rounded-full uppercase tracking-wide">
-                {promptData.isFree ? "Free" : `$${promptData.price}`}
-              </span>
-              <span className="border border-[#e8e4df] text-xs px-3 py-1 rounded-full text-gray-600">
-                {promptData.aiTool === "chatgpt" ? "ChatGPT" : "Gemini"}
-              </span>
-            </div>
-
-            <div className="bg-[#f9f7f4] rounded-xl p-4 font-mono text-sm relative overflow-hidden">
-              <p className="whitespace-pre-wrap text-black">{preview}</p>
-              {isLocked && rest && (
+            {/* Prompt Text Area */}
+            <div className="bg-[var(--card-warm)] border border-[var(--border-light)] rounded-lg p-5 font-mono text-[13px] leading-relaxed relative overflow-hidden flex-grow">
+              <p className="whitespace-pre-wrap text-black">{displayPreview}</p>
+              
+              {isLocked ? (
                 <div className="relative mt-2">
-                  <p className="whitespace-pre-wrap text-black blur-sm select-none">
-                    {rest || "The rest of this prompt is hidden until unlocked."}
-                  </p>
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <Lock className="w-6 h-6 text-black" />
+                  <div className="whitespace-pre-wrap text-black blur-[6px] select-none opacity-30">
+                    {displayRest}
+                  </div>
+                  <div className="absolute inset-0 flex flex-col items-center justify-center gap-3">
+                    <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-md">
+                      <Lock className="w-5 h-5 text-black" />
+                    </div>
+                    <span className="text-[13px] font-semibold text-black bg-white/90 px-4 py-1.5 rounded-full backdrop-blur-md shadow-sm">
+                      Unlock to view full prompt
+                    </span>
                   </div>
                 </div>
-              )}
-              {!isLocked && rest && (
-                <p className="whitespace-pre-wrap text-black mt-2">{rest}</p>
+              ) : (
+                <p className="whitespace-pre-wrap text-black mt-2">{displayRest}</p>
               )}
             </div>
 
-            <LikeButton promptId={promptId} likeCount={promptData.likeCount} />
-
-            <UnlockButton
-              promptId={promptId}
-              isFree={promptData.isFree}
-              price={promptData.price}
-              gumroadProductId={promptData.gumroadProductId}
-              promptText={promptText ?? undefined}
-            />
+            <div className="pt-2">
+              <UnlockButton
+                promptId={promptId}
+                isFree={promptData.isFree}
+                price={promptData.price}
+                gumroadProductId={promptData.gumroadProductId}
+                promptText={promptText ?? undefined}
+              />
+            </div>
           </div>
         </div>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }

@@ -8,12 +8,13 @@ import { ListingPrompts } from "@/components/prompts/listing-prompts";
 export const revalidate = 3600;
 
 interface Props {
-  params: { category: string; subcategory: string };
+  params: Promise<{ category: string; subcategory: string }>;
 }
 
 export async function generateMetadata({ params }: Props) {
+  const resolvedParams = await params;
   const sub = await fetchQuery(api.categories.getSubcategoryBySlug, {
-    slug: params.subcategory,
+    slug: resolvedParams.subcategory,
   });
   if (!sub) return {};
   return {
@@ -23,10 +24,11 @@ export async function generateMetadata({ params }: Props) {
 }
 
 export default async function ListingPage({ params }: Props) {
+  const resolvedParams = await params;
   const [category, subcategory] = await Promise.all([
-    fetchQuery(api.categories.getBySlug, { slug: params.category }),
+    fetchQuery(api.categories.getBySlug, { slug: resolvedParams.category }),
     fetchQuery(api.categories.getSubcategoryBySlug, {
-      slug: params.subcategory,
+      slug: resolvedParams.subcategory,
     }),
   ]);
   if (!category || !subcategory) notFound();
@@ -42,10 +44,9 @@ export default async function ListingPage({ params }: Props) {
   const prompts = await Promise.all(
     promptsRaw.map(async (p: (typeof promptsRaw)[number]) => ({
       ...p,
-      imageUrl:
-        (await fetchQuery(api.prompts.getImageUrl, {
-          storageId: p.imageStorageId,
-        })) ?? "/placeholder.png",
+      imageUrl: p.imageStorageId
+        ? await fetchQuery(api.prompts.getImageUrl, { storageId: p.imageStorageId })
+        : "https://images.unsplash.com/photo-1572375992501-4b0892d50c69?w=800&q=80",
     }))
   );
 

@@ -13,7 +13,7 @@ export const seedCategories = mutation({
       slug: "marketing",
       icon: "megaphone",
     });
-    await ctx.db.insert("subcategories", {
+    const tshirtsId = await ctx.db.insert("subcategories", {
       name: "T-Shirts",
       slug: "tshirts",
       categoryId: podId,
@@ -55,6 +55,36 @@ export const seedCategories = mutation({
       description: "AI prompts for ad creatives",
       gumroadPackId: "",
     });
-    return podId;
+    const dummyPromptId = await ctx.db.insert("prompts", {
+      title: "Neon Cyberpunk T-Shirt Design",
+      slug: "neon-cyberpunk-tshirt",
+      description: "A highly detailed neon cyberpunk character design perfect for black t-shirts.",
+      promptText: "A highly detailed illustration of a cyberpunk character wearing a neon jacket, vibrant pink and cyan lighting, dark alleyway background, hyperrealistic, 8k resolution, suitable for t-shirt print --v 6.0 --ar 4:5",
+      isFree: true,
+      price: 0,
+      aiTool: "midjourney",
+      subcategoryId: tshirtsId, 
+      gumroadProductId: "",
+      likeCount: 42,
+      isPublished: true,
+      isFeatured: true,
+    });
+
+    const dummyPrompt2Id = await ctx.db.insert("prompts", {
+      title: "Minimalist Brand Identity Mockup",
+      slug: "minimalist-brand-identity",
+      description: "A clean, minimalist brand identity mockup scene with business cards and letterhead.",
+      promptText: "A top-down view of a minimalist branding mockup scene. White business cards and letterhead on a light beige textured background. Soft natural window lighting, photorealistic, professional photography --v 6.0",
+      isFree: false,
+      price: 4.99,
+      aiTool: "midjourney",
+      subcategoryId: tshirtsId,
+      gumroadProductId: "dummy_product",
+      likeCount: 128,
+      isPublished: true,
+      isFeatured: true,
+    });
+
+    return { podId, marketingId };
   },
 });

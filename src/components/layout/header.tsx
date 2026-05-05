@@ -9,9 +9,9 @@ export function Header() {
   const { isSignedIn } = useAuth();
 
   return (
-    <header className="w-full bg-white border-b border-[#e8e4df] sticky top-0 z-40">
+    <header className="w-full bg-white/80 backdrop-blur-md border-b border-[var(--border-light)] sticky top-0 z-40">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
-        <Link href="/" className="flex flex-col shrink-0">
+        <Link href="/" className="flex flex-col shrink-0 group">
           <div className="flex items-center gap-1">
             <span
               className="text-[22px] text-black leading-none"
