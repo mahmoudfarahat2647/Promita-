@@ -44,11 +44,11 @@ export function LikeButton({ promptId, likeCount }: LikeButtonProps) {
     >
       <Heart
         className={cn(
-          "w-4 h-4",
-          liked ? "fill-black text-black" : "text-black"
+          "w-4 h-4 transition-colors",
+          liked ? "fill-red-500 text-red-500" : "text-[#666] fill-none"
         )}
       />
-      <span className="text-xs font-medium">{likeCount}</span>
+      <span className={cn("text-xs font-medium", liked ? "text-red-500" : "text-[#666]")}>{likeCount}</span>
     </button>
   );
 }

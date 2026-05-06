@@ -49,25 +49,45 @@
 }
 
 :root {
-  --background: #ffffff;
-  --foreground: #000000;
-  --card: #f9f7f4;
-  --card-foreground: #000000;
-  --popover: #ffffff;
-  --popover-foreground: #000000;
-  --primary: #000000;
-  --primary-foreground: #ffffff;
-  --secondary: #f0ece6;
-  --secondary-foreground: #000000;
-  --muted: #f0ece6;
-  --muted-foreground: #808080;
-  --accent: #f0ece6;
-  --accent-foreground: #000000;
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: #e8e4df;
-  --input: #e8e4df;
-  --ring: #000000;
-  --radius: 12px;
+  --background: #000000;
+  --foreground: #ffffff;
+  --card: #111111;
+  --card-foreground: #ffffff;
+  --popover: #111111;
+  --popover-foreground: #ffffff;
+  --primary: #ffffff;
+  --primary-foreground: #000000;
+  --secondary: #1a1a1a;
+  --secondary-foreground: #ffffff;
+  --muted: #111111;
+  --muted-foreground: #666666;
+  --accent: #1a1a1a;
+  --accent-foreground: #ffffff;
+  --destructive: #ef4444;
+  --border: #222222;
+  --input: #222222;
+  --ring: #333333;
+  --radius: 0.625rem;
+
+  /* sidebar tokens */
+  --sidebar: #000000;
+  --sidebar-foreground: #ffffff;
+  --sidebar-primary: #ffffff;
+  --sidebar-primary-foreground: #000000;
+  --sidebar-accent: #1a1a1a;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: #222222;
+  --sidebar-ring: #333333;
+
+  /* chart tokens (kept for shadcn compat) */
+  --chart-1: #ffffff;
+  --chart-2: #999999;
+  --chart-3: #666666;
+  --chart-4: #333333;
+  --chart-5: #1a1a1a;
+
+  /* logo font */
+  --font-logo: var(--font-dancing);
 }
 
 @layer base {
@@ -80,17 +100,13 @@
   html {
     @apply font-sans;
   }
+  body.sidebar-open {
+    overflow: hidden;
+  }
 }
 
 @layer utilities {
   .hover-lift-shadow {
-    @apply hover:-translate-y-0.5 hover:shadow-[0_4px_20px_rgba(0,0,0,0.08)] transition-all duration-300;
+    @apply hover:-translate-y-0.5 transition-all duration-150;
   }
-}
-
-/* Promptita design tokens */
-:root {
-  --card-warm: #f9f7f4;
-  --border-light: #e8e4df;
-  --font-logo: var(--font-dancing);
 }

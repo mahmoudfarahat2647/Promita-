@@ -109,7 +109,7 @@ export function PromptForm({ initialData }: PromptFormProps) {
         <label key={label} className="flex flex-col gap-1 text-sm font-medium">
           {label}
           <input
-            className="border border-[#e8e4df] rounded-lg px-3 py-2 text-sm outline-none focus:border-black"
+            className="border border-[#333] bg-[#0a0a0a] text-white rounded-lg px-3 py-2 text-sm outline-none focus:border-white"
             value={value}
             onChange={(e) => onChange(e.target.value)}
             required={label !== "Gumroad Product ID"}
@@ -120,7 +120,7 @@ export function PromptForm({ initialData }: PromptFormProps) {
       <label className="flex flex-col gap-1 text-sm font-medium">
         Prompt Text
         <textarea
-          className="border border-[#e8e4df] rounded-lg px-3 py-2 text-sm font-mono outline-none focus:border-black h-32 resize-y"
+          className="border border-[#333] bg-[#0a0a0a] text-white rounded-lg px-3 py-2 text-sm font-mono outline-none focus:border-white h-32 resize-y"
           value={promptText}
           onChange={(e) => setPromptText(e.target.value)}
           required
@@ -130,7 +130,7 @@ export function PromptForm({ initialData }: PromptFormProps) {
       <label className="flex flex-col gap-1 text-sm font-medium">
         AI Tool
         <select
-          className="border border-[#e8e4df] rounded-lg px-3 py-2 text-sm outline-none focus:border-black"
+          className="border border-[#333] bg-[#0a0a0a] text-white rounded-lg px-3 py-2 text-sm outline-none focus:border-white"
           value={aiTool}
           onChange={(e) => setAiTool(e.target.value as "chatgpt" | "gemini")}
         >
@@ -150,7 +150,7 @@ export function PromptForm({ initialData }: PromptFormProps) {
           <input
             type="number"
             step="0.01"
-            className="border border-[#e8e4df] rounded-lg px-3 py-2 text-sm outline-none focus:border-black"
+            className="border border-[#333] bg-[#0a0a0a] text-white rounded-lg px-3 py-2 text-sm outline-none focus:border-white"
             value={price}
             onChange={(e) => setPrice(parseFloat(e.target.value))}
           />

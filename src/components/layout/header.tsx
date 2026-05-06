@@ -1,49 +1,41 @@
 "use client";
-import Link from "next/link";
 import { SignInButton, UserButton, useAuth } from "@clerk/nextjs";
-import { Sparkles } from "lucide-react";
-import { SearchBar } from "@/components/search/search-bar";
-import { Button } from "@/components/ui/button";
+import { Menu } from "lucide-react";
+import { useSidebar } from "./shell";
 
 export function Header() {
+  const { toggle } = useSidebar();
   const { isSignedIn } = useAuth();
 
   return (
-    <header className="w-full bg-white/80 backdrop-blur-md border-b border-[var(--border-light)] sticky top-0 z-40">
-      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
-        <Link href="/" className="flex flex-col shrink-0 group">
-          <div className="flex items-center gap-1">
-            <span
-              className="text-[22px] text-black leading-none"
-              style={{ fontFamily: "var(--font-dancing)" }}
-            >
-              Promptita
-            </span>
-            <Sparkles className="w-4 h-4 text-black" />
-          </div>
-          <span className="text-[11px] text-gray-400 leading-none mt-0.5">
-            AI Prompts for POD &amp; Marketing
-          </span>
-        </Link>
+    <header className="h-14 border-b border-[#222] bg-black flex items-center justify-between px-4 sticky top-0 z-30">
+      <div className="flex items-center gap-3">
+        <button
+          onClick={toggle}
+          className="lg:hidden text-[#666] hover:text-white transition-colors"
+          aria-label="Toggle sidebar"
+        >
+          <Menu size={20} />
+        </button>
+        <span className="text-sm text-[#666]">AI Prompts for POD &amp; Marketing</span>
+      </div>
 
-        <div className="flex-1 max-w-md">
-          <SearchBar />
-        </div>
-
-        <div className="shrink-0">
-          {!isSignedIn ? (
-            <SignInButton mode="modal">
-              <Button
-                className="rounded-full bg-black text-white hover:bg-black/80 px-5 text-sm"
-                size="sm"
-              >
-                Sign In
-              </Button>
-            </SignInButton>
-          ) : (
-            <UserButton />
-          )}
-        </div>
+      <div>
+        {!isSignedIn ? (
+          <SignInButton mode="modal">
+            <button className="border border-[#333] text-white text-sm px-3 py-1.5 rounded-lg bg-transparent hover:bg-[#111] transition-colors">
+              Sign in
+            </button>
+          </SignInButton>
+        ) : (
+          <UserButton
+            appearance={{
+              elements: {
+                avatarBox: "w-8 h-8",
+              },
+            }}
+          />
+        )}
       </div>
     </header>
   );

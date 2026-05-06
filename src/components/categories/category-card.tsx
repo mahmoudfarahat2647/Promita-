@@ -22,18 +22,18 @@ export function CategoryCard({ name, parentName, icon, href }: CategoryCardProps
     <Link
       href={href}
       className={cn(
-        "flex items-center gap-3 p-4 bg-white border border-[var(--border-light)] rounded-xl",
-        "hover-lift-shadow transition-all duration-300"
+        "flex items-center gap-3 p-4 bg-[#111] border border-[#222] rounded-xl",
+        "hover:border-[#444] hover:bg-[#1a1a1a] transition-colors duration-150"
       )}
     >
-      <div className="p-2 rounded-lg bg-[var(--card-warm)] text-black shrink-0">
+      <div className="p-2 rounded-lg bg-[#1a1a1a] text-white shrink-0">
         {iconMap[icon] ?? <Shirt className="w-5 h-5" />}
       </div>
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-semibold text-black truncate">{name}</p>
-        <p className="text-xs text-gray-400">{parentName}</p>
+        <p className="text-sm font-semibold text-white truncate">{name}</p>
+        <p className="text-xs text-[#666]">{parentName}</p>
       </div>
-      <ChevronRight className="w-4 h-4 text-gray-400 shrink-0" />
+      <ChevronRight className="w-4 h-4 text-[#444] shrink-0" />
     </Link>
   );
 }

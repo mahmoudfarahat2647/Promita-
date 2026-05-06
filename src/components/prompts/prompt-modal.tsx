@@ -51,18 +51,18 @@ export function PromptModal({ promptId, onClose }: PromptModalProps) {
 
   return (
     <Dialog open={true} onOpenChange={(open) => { if (!open) onClose(); }}>
-      <DialogContent className="max-w-4xl p-0 overflow-hidden bg-white rounded-xl border border-[var(--border-light)] shadow-2xl gap-0">
+      <DialogContent className="max-w-4xl p-0 overflow-hidden bg-[#111] rounded-xl border border-[#333] gap-0">
         <DialogTitle className="sr-only">{promptData.title}</DialogTitle>
         <DialogDescription className="sr-only">{promptData.description}</DialogDescription>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2">
           {/* Left Side: Image */}
-          <div className="relative aspect-square md:aspect-auto md:h-full bg-[#f0ece6] overflow-hidden">
+          <div className="relative aspect-square md:aspect-auto md:h-full bg-[#0a0a0a] overflow-hidden">
             {imageUrl && (
               <ImageViewer src={imageUrl} alt={promptData.title} className="object-cover w-full h-full" />
             )}
             <div className="absolute top-4 left-4 flex gap-2">
-              <span className="bg-black text-white text-[11px] font-semibold uppercase tracking-widest px-3 py-1 rounded-full shadow-sm">
+              <span className={`text-[11px] font-semibold uppercase tracking-widest px-3 py-1 rounded-full ${promptData.isFree ? "bg-white text-black" : "bg-black text-white border border-[#333]"}`}>
                 {promptData.isFree ? "FREE" : `$${promptData.price.toFixed(2)}`}
               </span>
             </div>
@@ -72,39 +72,39 @@ export function PromptModal({ promptId, onClose }: PromptModalProps) {
           <div className="p-8 flex flex-col gap-6 max-h-[85vh] overflow-y-auto">
             <div className="flex flex-col gap-2">
               <div className="flex items-center justify-between">
-                <span className="text-[12px] font-medium text-gray-400 uppercase tracking-wider">
+                <span className="text-[12px] font-medium text-[#666] uppercase tracking-wider">
                   {promptData.aiTool === "chatgpt" ? "ChatGPT" : "Gemini"}
                 </span>
                 <LikeButton promptId={promptId} likeCount={promptData.likeCount} />
               </div>
-              <h2 className="text-2xl font-bold text-black tracking-tight leading-snug">
+              <h2 className="text-2xl font-bold text-white tracking-tight leading-snug">
                 {promptData.title}
               </h2>
-              <p className="text-[14px] text-gray-500 leading-relaxed">
+              <p className="text-[14px] text-[#666] leading-relaxed">
                 {promptData.description}
               </p>
             </div>
 
             {/* Prompt Text Area */}
-            <div className="bg-[var(--card-warm)] border border-[var(--border-light)] rounded-lg p-5 font-mono text-[13px] leading-relaxed relative overflow-hidden flex-grow">
-              <p className="whitespace-pre-wrap text-black">{displayPreview}</p>
-              
+            <div className="bg-[#0a0a0a] border border-[#222] rounded-lg p-5 font-mono text-[13px] leading-relaxed relative overflow-hidden flex-grow">
+              <p className="whitespace-pre-wrap text-[#999]">{displayPreview}</p>
+
               {isLocked ? (
                 <div className="relative mt-2">
-                  <div className="whitespace-pre-wrap text-black blur-[6px] select-none opacity-30">
+                  <div className="whitespace-pre-wrap text-[#999] blur-[6px] select-none opacity-40">
                     {displayRest}
                   </div>
                   <div className="absolute inset-0 flex flex-col items-center justify-center gap-3">
-                    <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-md">
-                      <Lock className="w-5 h-5 text-black" />
+                    <div className="w-12 h-12 bg-[#1a1a1a] border border-[#333] rounded-full flex items-center justify-center">
+                      <Lock className="w-5 h-5 text-white" />
                     </div>
-                    <span className="text-[13px] font-semibold text-black bg-white/90 px-4 py-1.5 rounded-full backdrop-blur-md shadow-sm">
+                    <span className="text-[13px] font-semibold text-white bg-[#0a0a0a]/90 border border-[#333] px-4 py-1.5 rounded-full backdrop-blur-md">
                       Unlock to view full prompt
                     </span>
                   </div>
                 </div>
               ) : (
-                <p className="whitespace-pre-wrap text-black mt-2">{displayRest}</p>
+                <p className="whitespace-pre-wrap text-[#999] mt-2">{displayRest}</p>
               )}
             </div>
 

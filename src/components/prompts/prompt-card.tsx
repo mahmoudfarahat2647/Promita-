@@ -32,34 +32,37 @@ export function PromptCard({ prompt, onClick }: PromptCardProps) {
 
   return (
     <div
-      className="bg-[var(--card-warm)] border border-[var(--border-light)] rounded-lg overflow-hidden cursor-pointer hover-lift-shadow group flex flex-col"
+      className="bg-[#111] border border-[#222] rounded-[10px] overflow-hidden cursor-pointer hover-lift-shadow group flex flex-col"
       onClick={() => onClick(prompt._id)}
     >
-      <div className="relative aspect-[4/5] bg-[var(--secondary)] overflow-hidden">
-        <ImageViewer 
-          src={prompt.imageUrl} 
-          alt={prompt.title} 
-          className="group-hover:scale-105 transition-transform duration-700 ease-out" 
+      <div className="relative aspect-[4/5] bg-[#1a1a1a] overflow-hidden">
+        <ImageViewer
+          src={prompt.imageUrl}
+          alt={prompt.title}
+          className="group-hover:scale-105 transition-transform duration-700 ease-out"
         />
-        <span className="absolute top-3 left-3 bg-black text-white text-[11px] font-semibold uppercase tracking-widest px-3 py-1 rounded-full shadow-sm">
+        <span className={cn(
+          "absolute top-3 left-3 text-[11px] font-semibold uppercase tracking-widest px-3 py-1 rounded-full",
+          prompt.isFree ? "bg-white text-black" : "bg-black text-white border border-[#333]"
+        )}>
           {prompt.isFree ? "FREE" : `$${prompt.price.toFixed(2)}`}
         </span>
         <button
-          className="absolute bottom-3 right-3 flex items-center gap-1.5 bg-white/90 backdrop-blur-md px-2.5 py-1 rounded-full shadow-sm hover:bg-white transition-colors"
+          className="absolute bottom-3 right-3 flex items-center gap-1.5 bg-black/60 backdrop-blur-sm px-2.5 py-1 rounded-full transition-colors"
           onClick={handleLike}
         >
           <Heart
             className={cn(
               "w-4 h-4 transition-colors",
-              liked ? "fill-black text-black" : "text-black"
+              liked ? "fill-red-500 text-red-500" : "text-[#999] fill-none"
             )}
           />
-          <span className="text-black text-xs font-semibold">{likes}</span>
+          <span className={cn("text-xs font-medium", liked ? "text-red-500" : "text-[#999]")}>{likes}</span>
         </button>
       </div>
       <div className="p-4 flex flex-col gap-0.5">
-        <p className="text-[14px] font-bold text-black truncate">{prompt.title}</p>
-        <p className="text-[12px] text-gray-500 truncate">{prompt.description}</p>
+        <p className="text-[14px] font-bold text-white truncate">{prompt.title}</p>
+        <p className="text-[12px] text-[#666] truncate">{prompt.description}</p>
       </div>
     </div>
   );

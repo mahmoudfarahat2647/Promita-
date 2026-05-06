@@ -10,9 +10,9 @@ export function BookmarksTab() {
   const bookmarks = useQuery(api.bookmarks.getBookmarks, {});
   const [selectedId, setSelectedId] = useState<Id<"prompts"> | null>(null);
 
-  if (!bookmarks) return <p className="text-sm text-gray-400">Loading…</p>;
+  if (!bookmarks) return <p className="text-sm text-[#666]">Loading…</p>;
   if (bookmarks.length === 0)
-    return <p className="text-sm text-gray-400">No bookmarks yet.</p>;
+    return <p className="text-sm text-[#666]">No bookmarks yet.</p>;
 
   return (
     <>

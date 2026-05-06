@@ -10,9 +10,9 @@ export function UnlockedTab() {
   const unlocked = useQuery(api.unlocks.getUserUnlocks, {});
   const [selectedId, setSelectedId] = useState<Id<"prompts"> | null>(null);
 
-  if (!unlocked) return <p className="text-sm text-gray-400">Loading…</p>;
+  if (!unlocked) return <p className="text-sm text-[#666]">Loading…</p>;
   if (unlocked.length === 0)
-    return <p className="text-sm text-gray-400">No unlocked prompts yet.</p>;
+    return <p className="text-sm text-[#666]">No unlocked prompts yet.</p>;
 
   return (
     <>

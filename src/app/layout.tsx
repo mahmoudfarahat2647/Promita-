@@ -3,6 +3,7 @@ import { Inter, Dancing_Script } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ConvexClerkProvider } from "@/components/layout/providers";
 import { Analytics } from "@/components/layout/analytics";
+import { Shell } from "@/components/layout/shell";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
@@ -27,10 +28,10 @@ export default function RootLayout({
         lang="en"
         className={`${inter.variable} ${dancingScript.variable} h-full antialiased`}
       >
-        <body className="min-h-full flex flex-col bg-white">
+        <body className="min-h-full bg-black">
           <ConvexClerkProvider>
             <Analytics />
-            {children}
+            <Shell>{children}</Shell>
           </ConvexClerkProvider>
         </body>
       </html>

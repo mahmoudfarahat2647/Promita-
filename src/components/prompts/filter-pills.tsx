@@ -30,8 +30,8 @@ export function FilterPills() {
           className={cn(
             "px-4 py-1.5 rounded-full text-sm font-medium border transition-colors",
             active === pill.value
-              ? "bg-black text-white border-black"
-              : "bg-white text-black border-[#e8e4df] hover:border-black"
+              ? "bg-white text-black border-white"
+              : "bg-transparent text-[#666] border-[#333] hover:text-white hover:border-[#555]"
           )}
         >
           {pill.label}

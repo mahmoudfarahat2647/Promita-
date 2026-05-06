@@ -10,28 +10,28 @@ export function PromptsTable() {
   const togglePublished = useMutation(api.admin.togglePublished);
   const deletePrompt = useMutation(api.admin.deletePrompt);
 
-  if (!prompts) return <p className="text-sm text-gray-400">Loading…</p>;
+  if (!prompts) return <p className="text-sm text-[#666]">Loading…</p>;
 
   return (
-    <div className="border border-[#e8e4df] rounded-xl overflow-x-auto">
+    <div className="border border-[#222] rounded-xl overflow-x-auto">
       <table className="w-full text-sm">
-        <thead className="bg-[#f9f7f4]">
+        <thead className="bg-[#111]">
           <tr>
             {["Title", "AI Tool", "Price", "Published", "Actions"].map((h) => (
-              <th key={h} className="text-left px-4 py-3 font-medium text-black">{h}</th>
+              <th key={h} className="text-left px-4 py-3 font-medium text-[#666] text-xs uppercase tracking-wide">{h}</th>
             ))}
           </tr>
         </thead>
         <tbody>
           {prompts.map((p: (typeof prompts)[number]) => (
-            <tr key={p._id} className="border-t border-[#e8e4df]">
-              <td className="px-4 py-3 font-medium text-black">{p.title}</td>
-              <td className="px-4 py-3 text-gray-500 uppercase text-xs">{p.aiTool}</td>
-              <td className="px-4 py-3 text-gray-500">{p.isFree ? "Free" : `$${p.price}`}</td>
+            <tr key={p._id} className="border-t border-[#222]">
+              <td className="px-4 py-3 font-medium text-white">{p.title}</td>
+              <td className="px-4 py-3 text-[#666] uppercase text-xs">{p.aiTool}</td>
+              <td className="px-4 py-3 text-[#666]">{p.isFree ? "Free" : `$${p.price}`}</td>
               <td className="px-4 py-3">
                 <button
                   onClick={() => togglePublished({ id: p._id as Id<"prompts">, isPublished: !p.isPublished })}
-                  className={`text-xs px-2.5 py-1 rounded-full font-medium ${p.isPublished ? "bg-black text-white" : "bg-[#f9f7f4] text-gray-500 border border-[#e8e4df]"}`}
+                  className={`text-xs px-2.5 py-1 rounded-full font-medium ${p.isPublished ? "bg-white text-black" : "bg-[#1a1a1a] text-[#666] border border-[#333]"}`}
                 >
                   {p.isPublished ? "Live" : "Draft"}
                 </button>
