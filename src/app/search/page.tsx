@@ -3,7 +3,6 @@ import { useSearchParams } from "next/navigation";
 import { useQuery } from "convex/react";
 import { useState, Suspense } from "react";
 import { api } from "../../../convex/_generated/api";
-import { Header } from "@/components/layout/header";
 import { PromptModal } from "@/components/prompts/prompt-modal";
 import { PromptGrid } from "@/components/prompts/prompt-grid";
 import { Id } from "../../../convex/_generated/dataModel";
@@ -16,14 +15,14 @@ function SearchContent() {
 
   return (
     <>
-      <h1 className="text-xl font-bold text-black mb-2">
+      <h1 className="text-xl font-bold text-white mb-2">
         {q ? `Results for "${q}"` : "Search Prompts"}
       </h1>
       {results === undefined && (
-        <p className="text-gray-400 text-sm">Searching…</p>
+        <p className="text-[#666] text-sm">Searching…</p>
       )}
       {results?.length === 0 && (
-        <p className="text-gray-400 text-sm">No prompts found for "{q}"</p>
+        <p className="text-[#666] text-sm">No prompts found for "{q}"</p>
       )}
       {results && results.length > 0 && (
         <PromptGrid
@@ -40,13 +39,10 @@ function SearchContent() {
 
 export default function SearchPage() {
   return (
-    <>
-      <Header />
-      <main className="max-w-7xl mx-auto px-6 py-10 w-full">
-        <Suspense fallback={<p className="text-gray-400 text-sm">Loading search...</p>}>
-          <SearchContent />
-        </Suspense>
-      </main>
-    </>
+    <main className="max-w-7xl mx-auto px-6 py-10 w-full">
+      <Suspense fallback={<p className="text-[#666] text-sm">Loading search...</p>}>
+        <SearchContent />
+      </Suspense>
+    </main>
   );
 }

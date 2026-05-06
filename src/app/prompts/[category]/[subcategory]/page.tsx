@@ -1,7 +1,6 @@
 import { notFound } from "next/navigation";
 import { fetchQuery } from "convex/nextjs";
 import { api } from "../../../../../convex/_generated/api";
-import { Header } from "@/components/layout/header";
 import { FilterPills } from "@/components/prompts/filter-pills";
 import { ListingPrompts } from "@/components/prompts/listing-prompts";
 
@@ -51,19 +50,16 @@ export default async function ListingPage({ params }: Props) {
   );
 
   return (
-    <>
-      <Header />
-      <main className="max-w-7xl mx-auto px-6 py-10 w-full">
-        <nav className="text-xs text-gray-400 mb-4">
-          {category.name} / {subcategory.name}
-        </nav>
-        <div className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl font-bold text-black">{subcategory.name}</h1>
-          <FilterPills />
-        </div>
-        <p className="text-sm text-gray-500 mb-8">{subcategory.description}</p>
-        <ListingPrompts prompts={prompts as any} />
-      </main>
-    </>
+    <main className="max-w-7xl mx-auto px-6 py-10 w-full">
+      <nav className="text-xs text-[#666] mb-4">
+        {category.name} / {subcategory.name}
+      </nav>
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-2xl font-bold text-white">{subcategory.name}</h1>
+        <FilterPills />
+      </div>
+      <p className="text-sm text-[#666] mb-8">{subcategory.description}</p>
+      <ListingPrompts prompts={prompts as any} />
+    </main>
   );
 }

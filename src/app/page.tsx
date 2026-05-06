@@ -1,6 +1,5 @@
 import { fetchQuery } from "convex/nextjs";
 import { api } from "../../convex/_generated/api";
-import { Header } from "@/components/layout/header";
 import { CategoryGrid } from "@/components/categories/category-grid";
 import { HomepagePrompts } from "@/components/prompts/homepage-prompts";
 
@@ -29,36 +28,31 @@ export default async function HomePage() {
   ]);
 
   return (
-    <>
-      <Header />
-      <main className="max-w-7xl mx-auto px-6 py-10 w-full flex flex-col gap-12">
-        <section>
-          <h2 className="text-xl font-bold text-black mb-6">
-            Browse Categories
-          </h2>
-          <CategoryGrid categories={categories as any} />
-        </section>
+    <main className="max-w-7xl mx-auto px-6 py-10 w-full flex flex-col gap-12">
+      <section>
+        <h2 className="text-xl font-bold text-white mb-6">Browse Categories</h2>
+        <CategoryGrid categories={categories as any} />
+      </section>
 
-        <section>
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-bold text-black">Featured Prompts</h2>
-            <a href="/search" className="text-sm text-gray-500 hover:text-black flex items-center gap-1">
-              View all →
-            </a>
-          </div>
-          <HomepagePrompts prompts={featured as any} />
-        </section>
+      <section>
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-xl font-bold text-white">Featured Prompts</h2>
+          <a href="/search" className="text-sm text-[#666] hover:text-white flex items-center gap-1">
+            View all →
+          </a>
+        </div>
+        <HomepagePrompts prompts={featured as any} />
+      </section>
 
-        <section>
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-bold text-black">Free Prompts</h2>
-            <a href="/search?isFree=true" className="text-sm text-gray-500 hover:text-black flex items-center gap-1">
-              View all →
-            </a>
-          </div>
-          <HomepagePrompts prompts={free as any} />
-        </section>
-      </main>
-    </>
+      <section>
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-xl font-bold text-white">Free Prompts</h2>
+          <a href="/search?isFree=true" className="text-sm text-[#666] hover:text-white flex items-center gap-1">
+            View all →
+          </a>
+        </div>
+        <HomepagePrompts prompts={free as any} />
+      </section>
+    </main>
   );
 }

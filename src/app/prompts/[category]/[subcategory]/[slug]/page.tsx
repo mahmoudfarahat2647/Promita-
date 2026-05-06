@@ -1,7 +1,6 @@
 import { notFound } from "next/navigation";
 import { fetchQuery } from "convex/nextjs";
 import { api } from "../../../../../../convex/_generated/api";
-import { Header } from "@/components/layout/header";
 import { ImageViewer } from "@/components/prompts/image-viewer";
 
 export const revalidate = 3600;
@@ -36,23 +35,20 @@ export default async function PromptPage({ params }: Props) {
   });
 
   return (
-    <>
-      <Header />
-      <main className="max-w-2xl mx-auto px-6 py-10">
-        <div className="aspect-video bg-[#f0ece6] rounded-xl overflow-hidden mb-6">
-          {imageUrl && <ImageViewer src={imageUrl} alt={prompt.title} />}
-        </div>
-        <h1 className="text-2xl font-bold text-black mb-2">{prompt.title}</h1>
-        <p className="text-gray-500 mb-4">{prompt.description}</p>
-        <div className="flex gap-2">
-          <span className="bg-black text-white text-xs px-3 py-1 rounded-full uppercase">
-            {prompt.isFree ? "Free" : `$${prompt.price}`}
-          </span>
-          <span className="border border-[#e8e4df] text-xs px-3 py-1 rounded-full text-gray-500">
-            {prompt.aiTool === "chatgpt" ? "ChatGPT" : "Gemini"}
-          </span>
-        </div>
-      </main>
-    </>
+    <main className="max-w-2xl mx-auto px-6 py-10">
+      <div className="aspect-video bg-[#0a0a0a] rounded-xl overflow-hidden mb-6">
+        {imageUrl && <ImageViewer src={imageUrl} alt={prompt.title} />}
+      </div>
+      <h1 className="text-2xl font-bold text-white mb-2">{prompt.title}</h1>
+      <p className="text-[#666] mb-4">{prompt.description}</p>
+      <div className="flex gap-2">
+        <span className={`text-xs px-3 py-1 rounded-full uppercase font-medium ${prompt.isFree ? "bg-white text-black" : "bg-black text-white border border-[#333]"}`}>
+          {prompt.isFree ? "Free" : `$${prompt.price}`}
+        </span>
+        <span className="border border-[#333] text-xs px-3 py-1 rounded-full text-[#666]">
+          {prompt.aiTool === "chatgpt" ? "ChatGPT" : "Gemini"}
+        </span>
+      </div>
+    </main>
   );
 }
