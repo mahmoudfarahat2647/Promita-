@@ -8,7 +8,7 @@ export function Header() {
   const { isSignedIn } = useAuth();
 
   return (
-    <header className="h-14 border-b border-[#222] bg-black flex items-center justify-between px-4 sticky top-0 z-30">
+    <header className="h-14 border-b border-[#222] backdrop-blur-sm bg-black/80 flex items-center justify-between px-4 sticky top-0 z-30">
       <div className="flex items-center gap-3">
         <button
           onClick={toggle}

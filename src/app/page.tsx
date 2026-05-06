@@ -2,6 +2,7 @@ import { fetchQuery } from "convex/nextjs";
 import { api } from "../../convex/_generated/api";
 import { CategoryGrid } from "@/components/categories/category-grid";
 import { HomepagePrompts } from "@/components/prompts/homepage-prompts";
+import { HeroSection } from "@/components/layout/hero-section";
 
 export const revalidate = 3600;
 
@@ -28,15 +29,17 @@ export default async function HomePage() {
   ]);
 
   return (
-    <main className="max-w-7xl mx-auto px-6 py-10 w-full flex flex-col gap-12">
+    <main className="max-w-7xl mx-auto px-6 w-full flex flex-col gap-12">
+      <HeroSection />
+
       <section>
-        <h2 className="text-xl font-bold text-white mb-6">Browse Categories</h2>
+        <h2 className="text-lg font-bold tracking-tight text-white mb-6">Browse Categories</h2>
         <CategoryGrid categories={categories as any} />
       </section>
 
       <section>
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-bold text-white">Featured Prompts</h2>
+          <h2 className="text-lg font-bold tracking-tight text-white">Featured Prompts</h2>
           <a href="/search" className="text-sm text-[#666] hover:text-white flex items-center gap-1">
             View all →
           </a>
@@ -46,7 +49,7 @@ export default async function HomePage() {
 
       <section>
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-bold text-white">Free Prompts</h2>
+          <h2 className="text-lg font-bold tracking-tight text-white">Free Prompts</h2>
           <a href="/search?isFree=true" className="text-sm text-[#666] hover:text-white flex items-center gap-1">
             View all →
           </a>

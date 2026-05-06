@@ -32,7 +32,7 @@ export function Sidebar() {
       <div className="px-4 py-4 border-b border-[#222]">
         <Link
           href="/"
-          className="text-xl font-bold text-white"
+          className="text-[22px] font-extrabold tracking-[-1px] italic text-white"
           style={{ fontFamily: "var(--font-dancing)" }}
         >
           promptita
@@ -40,10 +40,10 @@ export function Sidebar() {
       </div>
 
       {/* Search link */}
-      <div className="px-3 py-2 border-b border-[#222]">
+      <div className="py-1 border-b border-[#222]">
         <Link
           href="/search"
-          className="flex items-center gap-2 px-3 py-2 rounded-md text-sm text-[#666] hover:text-white hover:bg-[#1a1a1a] transition-colors"
+          className="flex items-center gap-2 bg-[#111] border border-[#1e1e1e] rounded-md px-3 py-2 mx-3 text-sm text-[#666] hover:text-white hover:border-[#2a2a2a] transition-colors"
         >
           <Search size={14} />
           <span>Search prompts</span>
@@ -61,7 +61,7 @@ export function Sidebar() {
             <div key={cat._id}>
               <button
                 onClick={() => toggleSection(cat.slug)}
-                className="w-full flex items-center justify-between px-4 py-2 text-xs font-semibold uppercase tracking-widest text-[#444] hover:text-[#666] transition-colors"
+                className="w-full flex items-center justify-between px-4 py-2 text-xs font-semibold uppercase tracking-[2.5px] text-[#333] hover:text-[#666] transition-colors"
               >
                 <span>{cat.name}</span>
                 <ChevronDown
