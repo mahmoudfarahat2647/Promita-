@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Promptita — AI Prompts for POD & Marketing</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --bg: #ffffff;
+            --text: #000000;
+            --text-muted: #737373;
+            --card-bg: #f9f7f4;
+            --border: #e8e4df;
+            --badge-bg: #000000;
+            --badge-text: #ffffff;
+            --placeholder: #f5f0ea;
+            
+            --radius-card: 12px;
+            --radius-pill: 99px;
+            --radius-modal: 16px;
+            
+            --gap-grid: 16px;
+            --margin-section: 48px;
+            --padding-card: 16px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 32px;
+            border-bottom: 1px solid var(--border);
+            background: var(--bg);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo-container {
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .logo-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .logo-text {
+            font-family: 'Dancing Script', cursive;
+            font-size: 26px;
+            color: var(--text);
+            transform: translateY(2px);
+        }
+
+        .logo-sub {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: -2px;
+            letter-spacing: 0.2px;
+        }
+
+        .btn-primary {
+            background: var(--text);
+            color: var(--bg);
+            padding: 10px 24px;
+            border-radius: var(--radius-pill);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.85;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        /* Layout */
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 32px 80px;
+        }
+
+        section {
+            margin-bottom: var(--margin-section);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .view-all {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .view-all:hover {
+            color: var(--text);
+        }
+
+        /* Category Grid */
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--gap-grid);
+        }
+
+        .category-card {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-card);
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: box-shadow 0.2s;
+        }
+
+        .category-card:hover {
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+        }
+
+        .category-icon {
+            width: 44px;
+            height: 44px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 16px;
+        }
+
+        .category-info {
+            flex: 1;
+        }
+
+        .category-name {
+            font-weight: 600;
+            font-size: 15px;
+            margin-bottom: 2px;
+        }
+
+        .category-parent {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .category-arrow {
+            color: var(--border);
+            transition: transform 0.2s, color 0.2s;
+        }
+
+        .category-card:hover .category-arrow {
+            transform: translateX(4px);
+            color: var(--text);
+        }
+
+        /* Prompts Grid */
+        .prompts-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--gap-grid);
+        }
+
+        .prompt-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-card);
+            padding: var(--padding-card);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .prompt-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        .card-image-wrap {
+            width: 100%;
+            aspect-ratio: 4/5;
+            background: var(--placeholder);
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+
+        .card-image-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .prompt-card:hover .card-image-wrap img {
+            transform: scale(1.03);
+        }
+
+        .badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: var(--badge-bg);
+            color: var(--badge-text);
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            border-radius: var(--radius-pill);
+            letter-spacing: 0.5px;
+            z-index: 2;
+        }
+
+        .like-btn {
+            position: absolute;
+            bottom: 12px;
+            right: 12px;
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(4px);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-pill);
+            padding: 6px 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.2s;
+            z-index: 2;
+        }
+
+        .like-btn:hover {
+            background: var(--bg);
+        }
+
+        .like-btn.liked svg {
+            fill: var(--text);
+            color: var(--text);
+        }
+
+        .card-title {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .card-desc {
+            font-size: 12px;
+            color: var(--text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Modal Overlay */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background: var(--bg);
+            width: 100%;
+            max-width: 720px;
+            border-radius: var(--radius-modal);
+            box-shadow: 0 24px 48px rgba(0,0,0,0.08);
+            display: flex;
+            position: relative;
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 16px; right: 16px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            transition: background 0.2s;
+        }
+
+        .modal-close:hover {
+            background: var(--card-bg);
+        }
+
+        .modal-left {
+            width: 50%;
+            background: var(--placeholder);
+        }
+
+        .modal-left img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .modal-right {
+            width: 50%;
+            padding: 40px 32px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-breadcrumb {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        .modal-title {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            line-height: 1.2;
+        }
+
+        .modal-desc {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+
+        .modal-tags {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+        }
+
+        .modal-tag {
+            font-size: 11px;
+            font-weight: 500;
+            padding: 4px 10px;
+            border-radius: var(--radius-pill);
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+
+        .prompt-area {
+            background: var(--card-bg);
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            padding: 16px;
+            font-family: monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            position: relative;
+            margin-bottom: 24px;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .prompt-visible {
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+
+        .prompt-blurred {
+            color: var(--text-muted);
+            filter: blur(4px);
+            user-select: none;
+        }
+
+        .prompt-lock {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--bg);
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            border: 1px solid var(--border);
+            z-index: 2;
+        }
+
+        /* Subcategory Page */
+        .page-header {
+            margin-bottom: var(--margin-section);
+        }
+        
+        .page-breadcrumb {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+            cursor: pointer;
+        }
+        .page-breadcrumb span:hover {
+            color: var(--text);
+            text-decoration: underline;
+        }
+        
+        .page-title {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .page-desc {
+            color: var(--text-muted);
+            font-size: 15px;
+            margin-bottom: 32px;
+        }
+
+        .filters {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .filter-pill {
+            padding: 8px 16px;
+            border-radius: var(--radius-pill);
+            border: 1px solid var(--border);
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: var(--bg);
+            color: var(--text-muted);
+        }
+
+        .filter-pill:hover {
+            border-color: var(--text);
+            color: var(--text);
+        }
+
+        .filter-pill.active {
+            background: var(--text);
+            color: var(--bg);
+            border-color: var(--text);
+        }
+
+        /* Dashboard */
+        .dash-tabs {
+            display: flex;
+            gap: 32px;
+            margin-bottom: 32px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .dash-tab {
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: color 0.2s;
+            position: relative;
+            padding-bottom: 16px;
+        }
+
+        .dash-tab:hover {
+            color: var(--text);
+        }
+
+        .dash-tab.active {
+            color: var(--text);
+        }
+
+        .dash-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--text);
+        }
+
+        .purchase-list {
+            border: 1px solid var(--border);
+            border-radius: var(--radius-card);
+            background: var(--bg);
+            overflow: hidden;
+        }
+
+        .purchase-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .purchase-item:last-child {
+            border-bottom: none;
+        }
+
+        .purchase-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .purchase-title {
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .purchase-date {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .purchase-price {
+            font-weight: 600;
+            font-size: 14px;
+            background: var(--card-bg);
+            padding: 4px 12px;
+            border-radius: var(--radius-pill);
+            border: 1px solid var(--border);
+        }
+
+        /* Visibility Controls */
+        .page { display: none; }
+        .page.active { display: block; animation: fadeIn 0.4s ease-out; }
+        
+        .dash-panel { display: none; }
+        .dash-panel.active { display: block; animation: fadeIn 0.3s ease-out; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="logo-container" onclick="navigate('home')">
+            <div class="logo-row">
+                <span class="logo-text">Promptita</span>
+                <i data-lucide="sparkles" style="width:18px;height:18px;color:#000;"></i>
+            </div>
+            <div class="logo-sub">AI Prompts for POD & Marketing</div>
+        </div>
+        
+        <button id="nav-signin" class="btn-primary" onclick="signIn()">Sign In</button>
+        <div id="nav-avatar" class="avatar" onclick="navigate('dashboard')">
+            <i data-lucide="user" style="width:18px;height:18px;color:#000;"></i>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        
+        <!-- PAGE: HOME -->
+        <div id="page-home" class="page active">
+            <!-- Browse Categories -->
+            <section>
+                <div class="section-header">
+                    <h2 class="section-title">Browse Categories</h2>
+                </div>
+                <div class="categories-grid">
+                    <!-- Row 1 -->
+                    <div class="category-card" onclick="navigate('subcategory')">
+                        <div class="category-icon"><i data-lucide="shirt" style="width:20px;height:20px;"></i></div>
+                        <div class="category-info">
+                            <div class="category-name">T-Shirts</div>
+                            <div class="category-parent">POD</div>
+                        </div>
+                        <i data-lucide="chevron-right" class="category-arrow" style="width:16px;height:16px;"></i>
+                    </div>
+                    <div class="category-card" onclick="navigate('subcategory')">
+                        <div class="category-icon"><i data-lucide="circle-dashed" style="width:20px;height:20px;"></i></div>
+                        <div class="category-info">
+                            <div class="category-name">Stickers</div>
+                            <div class="category-parent">POD</div>
+                        </div>
+                        <i data-lucide="chevron-right" class="category-arrow" style="width:16px;height:16px;"></i>
+                    </div>
+                    <div class="category-card" onclick="navigate('subcategory')">
+                        <div class="category-icon"><i data-lucide="image" style="width:20px;height:20px;"></i></div>
+                        <div class="category-info">
+                            <div class="category-name">Mockups</div>
+                            <div class="category-parent">POD</div>
+                        </div>
+                        <i data-lucide="chevron-right" class="category-arrow" style="width:16px;height:16px;"></i>
+                    </div>
+                    <!-- Row 2 -->
+                    <div class="category-card" onclick="navigate('subcategory')">
+                        <div class="category-icon"><i data-lucide="message-square" style="width:20px;height:20px;"></i></div>
+                        <div class="category-info">
+                            <div class="category-name">Social Media</div>
+                            <div class="category-parent">Marketing</div>
+                        </div>
+                        <i data-lucide="chevron-right" class="category-arrow" style="width:16px;height:16px;"></i>
+                    </div>
+                    <div class="category-card" onclick="navigate('subcategory')">
+                        <div class="category-icon"><i data-lucide="camera" style="width:20px;height:20px;"></i></div>
+                        <div class="category-info">
+                            <div class="category-name">Product Photography</div>
+                            <div class="category-parent">Marketing</div>
+                        </div>
+                        <i data-lucide="chevron-right" class="category-arrow" style="width:16px;height:16px;"></i>
+                    </div>
+                    <div class="category-card" onclick="navigate('subcategory')">
+                        <div class="category-icon"><i data-lucide="megaphone" style="width:20px;height:20px;"></i></div>
+                        <div class="category-info">
+                            <div class="category-name">Ad Creatives</div>
+                            <div class="category-parent">Marketing</div>
+                        </div>
+                        <i data-lucide="chevron-right" class="category-arrow" style="width:16px;height:16px;"></i>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Featured Prompts -->
+            <section>
+                <div class="section-header">
+                    <h2 class="section-title">Featured Prompts</h2>
+                    <a href="#" class="view-all">View all ></a>
+                </div>
+                <div class="prompts-grid">
+                    <!-- Card 1 -->
+                    <div class="prompt-card" onclick="openModal('https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&q=80', 'Vintage Mountain Tee', 'Retro sun and pines linework', '$2.99', 'T-Shirts')">
+                        <div class="card-image-wrap">
+                            <div class="badge">$2.99</div>
+                            <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&q=80" alt="Vintage Mountain Tee">
+                            <div class="like-btn" onclick="toggleHeart(event)">
+                                <i data-lucide="heart" style="width:14px;height:14px;"></i> <span>124</span>
+                            </div>
+                        </div>
+                        <div class="card-title">Vintage Mountain Tee</div>
+                        <div class="card-desc">Retro sun and pines linework</div>
+                    </div>
+                    <!-- Card 2 -->
+                    <div class="prompt-card" onclick="openModal('https://images.unsplash.com/photo-1572375992501-4b0892d50c69?w=800&q=80', 'Minimalist Logo Sticker Pack', 'Clean vector line art badges', 'FREE', 'Stickers')">
+                        <div class="card-image-wrap">
+                            <div class="badge">FREE</div>
+                            <img src="https://images.unsplash.com/photo-1572375992501-4b0892d50c69?w=800&q=80" alt="Minimalist Logo Sticker">
+                            <div class="like-btn" onclick="toggleHeart(event)">
+                                <i data-lucide="heart" style="width:14px;height:14px;"></i> <span>90</span>
+                            </div>
+                        </div>
+                        <div class="card-title">Minimalist Logo Sticker Pack</div>
+                        <div class="card-desc">Clean vector line art badges</div>
+                    </div>
+                    <!-- Card 3 -->
+                    <div class="prompt-card" onclick="openModal('https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?w=800&q=80', 'Lifestyle Mockup Scene', 'Coffee shop table top view', '$2.99', 'Mockups')">
+                        <div class="card-image-wrap">
+                            <div class="badge">$2.99</div>
+                            <img src="https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?w=800&q=80" alt="Lifestyle Mockup">
+                            <div class="like-btn" onclick="toggleHeart(event)">
+                                <i data-lucide="heart" style="width:14px;height:14px;"></i> <span>42</span>
+                            </div>
+                        </div>
+                        <div class="card-title">Lifestyle Mockup Scene</div>
+                        <div class="card-desc">Coffee shop table top view</div>
+                    </div>
+                    <!-- Card 4 -->
+                    <div class="prompt-card" onclick="openModal('https://images.unsplash.com/photo-1544816155-12df9643f363?w=800&q=80', 'Instagram Product Reel', 'Fast-paced trendy transitions', 'FREE', 'Social Media')">
+                        <div class="card-image-wrap">
+                            <div class="badge">FREE</div>
+                            <img src="https://images.unsplash.com/photo-1544816155-12df9643f363?w=800&q=80" alt="Instagram Reel">
+                            <div class="like-btn" onclick="toggleHeart(event)">
+                                <i data-lucide="heart" style="width:14px;height:14px;"></i> <span>210</span>
+                            </div>
+                        </div>
+                        <div class="card-title">Instagram Product Reel</div>
+                        <div class="card-desc">Fast-paced trendy transitions</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Free Prompts -->
+            <section>
+                <div class="section-header">
+                    <h2 class="section-title">Free Prompts</h2>
+                    <a href="#" class="view-all">View all ></a>
+                </div>
+                <div class="prompts-grid">
+                    <div class="prompt-card" onclick="openModal('https://images.unsplash.com/photo-1586075010923-2dd4570fb338?w=800&q=80', 'Minimalist Typography Layout', 'Editorial style poster format', 'FREE', 'Ad Creatives')">
+                        <div class="card-image-wrap">
+                            <div class="badge">FREE</div>
+                            <img src="https://images.unsplash.com/photo-1586075010923-2dd4570fb338?w=800&q=80" alt="Minimalist Typography">
+                            <div class="like-btn" onclick="toggleHeart(event)">
+                                <i data-lucide="heart" style="width:14px;height:14px;"></i> <span>312</span>
+                            </div>
+                        </div>
+                        <div class="card-title">Minimalist Typography Layout</div>
+                        <div class="card-desc">Editorial style poster format</div>
+                    </div>
+                    <div class="prompt-card" onclick="openModal('https://images.unsplash.com/photo-1557682250-33bd709cbe85?w=800&q=80', 'Pastel Background Pack', 'Soft gradient textures', 'FREE', 'Mockups')">
+                        <div class="card-image-wrap">
+                            <div class="badge">FREE</div>
+                            <img src="https://images.unsplash.com/photo-1557682250-33bd709cbe85?w=800&q=80" alt="Pastel Background">
+                            <div class="like-btn" onclick="toggleHeart(event)">
+                                <i data-lucide="heart" style="width:14px;height:14px;"></i> <span>145</span>
+                            </div>
+                        </div>
+                        <div class="card-title">Pastel Background Pack</div>
+                        <div class="card-desc">Soft gradient textures</div>
+                    </div>
+                    <div class="prompt-card" onclick="openModal('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&q=80', '90s Nostalgia Asset Kit', 'Retro shapes and elements', 'FREE', 'Stickers')">
+                        <div class="card-image-wrap">
+                            <div class="badge">FREE</div>
+                            <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&q=80" alt="90s Nostalgia">
+                            <div class="like-btn" onclick="toggleHeart(event)">
+                                <i data-lucide="heart" style="width:14px;height:14px;"></i> <span>88</span>
+                            </div>
+                        </div>
+                        <div class="card-title">90s Nostalgia Asset Kit</div>
+                        <div class="card-desc">Retro shapes and elements</div>
+                    </div>
+                    <div class="prompt-card" onclick="openModal('https://images.unsplash.com/photo-1614850715649-1d0106293bd1?w=800&q=80', 'Glassmorphism UI Kit', 'Modern translucent elements', 'FREE', 'Social Media')">
+                        <div class="card-image-wrap">
+                            <div class="badge">FREE</div>
+                            <img src="https://images.unsplash.com/photo-1614850715649-1d0106293bd1?w=800&q=80" alt="Glassmorphism">
+                            <div class="like-btn" onclick="toggleHeart(event)">
+                                <i data-lucide="heart" style="width:14px;height:14px;"></i> <span>420</span>
+                            </div>
+                        </div>
+                        <div class="card-title">Glassmorphism UI Kit</div>
+                        <div class="card-desc">Modern translucent elements</div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- PAGE: SUBCATEGORY -->
+        <div id="page-subcategory" class="page">
+            <div class="page-header">
+                <div class="page-breadcrumb">
+                    <span onclick="navigate('home')">POD</span> > <span style="color:var(--text);">T-Shirts</span>
+                </div>
+                <h1 class="page-title">T-Shirts</h1>
+                <p class="page-desc">High-converting AI prompts to generate beautiful t-shirt graphics.</p>
+                
+                <div class="filters">
+                    <button class="filter-pill active" onclick="toggleFilter(event)">ChatGPT</button>
+                    <button class="filter-pill" onclick="toggleFilter(event)">Gemini</button>
+                </div>
+            </div>
+
+            <div class="prompts-grid">
+                 <!-- Repeating Card 1 to fill out the grid -->
+                 <div class="prompt-card" onclick="openModal('https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&q=80', 'Vintage Mountain Tee', 'Retro sun and pines linework', '$2.99', 'T-Shirts')">
+                    <div class="card-image-wrap">
+                        <div class="badge">$2.99</div>
+                        <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&q=80" alt="Vintage Mountain Tee">
+                        <div class="like-btn" onclick="toggleHeart(event)">
+                            <i data-lucide="heart" style="width:14px;height:14px;"></i> <span>124</span>
+                        </div>
+                    </div>
+                    <div class="card-title">Vintage Mountain Tee</div>
+                    <div class="card-desc">Retro sun and pines linework</div>
+                </div>
+                <div class="prompt-card" onclick="openModal('https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=800&q=80', 'Minimalist Typography Tee', 'Clean san-serif quotes', 'FREE', 'T-Shirts')">
+                    <div class="card-image-wrap">
+                        <div class="badge">FREE</div>
+                        <img src="https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=800&q=80" alt="Typo Tee">
+                        <div class="like-btn" onclick="toggleHeart(event)">
+                            <i data-lucide="heart" style="width:14px;height:14px;"></i> <span>89</span>
+                        </div>
+                    </div>
+                    <div class="card-title">Minimalist Typography Tee</div>
+                    <div class="card-desc">Clean san-serif quotes</div>
+                </div>
+                <div class="prompt-card" onclick="openModal('https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=800&q=80', 'Urban Streetwear Graphic', 'Grungy distressed aesthetic', '$2.99', 'T-Shirts')">
+                    <div class="card-image-wrap">
+                        <div class="badge">$2.99</div>
+                        <img src="https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=800&q=80" alt="Urban Tee">
+                        <div class="like-btn" onclick="toggleHeart(event)">
+                            <i data-lucide="heart" style="width:14px;height:14px;"></i> <span>201</span>
+                        </div>
+                    </div>
+                    <div class="card-title">Urban Streetwear Graphic</div>
+                    <div class="card-desc">Grungy distressed aesthetic</div>
+                </div>
+                <div class="prompt-card" onclick="openModal('https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=800&q=80', 'Pastel Aesthetic Shirt', 'Soft vaporwave elements', 'FREE', 'T-Shirts')">
+                    <div class="card-image-wrap">
+                        <div class="badge">FREE</div>
+                        <img src="https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=800&q=80" alt="Pastel Tee">
+                        <div class="like-btn" onclick="toggleHeart(event)">
+                            <i data-lucide="heart" style="width:14px;height:14px;"></i> <span>67</span>
+                        </div>
+                    </div>
+                    <div class="card-title">Pastel Aesthetic Shirt</div>
+                    <div class="card-desc">Soft vaporwave elements</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE: DASHBOARD -->
+        <div id="page-dashboard" class="page">
+            <div class="page-header">
+                <h1 class="page-title">Dashboard</h1>
+                <p class="page-desc">Manage your prompts and purchases.</p>
+            </div>
+
+            <div class="dash-tabs">
+                <div class="dash-tab active" onclick="switchDashTab('unlocked')">Unlocked Prompts</div>
+                <div class="dash-tab" onclick="switchDashTab('bookmarks')">Bookmarks</div>
+                <div class="dash-tab" onclick="switchDashTab('purchases')">Purchase History</div>
+            </div>
+
+            <div id="panel-unlocked" class="dash-panel active">
+                <div class="prompts-grid">
+                    <div class="prompt-card" onclick="openModal('https://images.unsplash.com/photo-1544816155-12df9643f363?w=800&q=80', 'Instagram Product Reel', 'Fast-paced trendy transitions', 'FREE', 'Social Media')">
+                        <div class="card-image-wrap">
+                            <div class="badge">FREE</div>
+                            <img src="https://images.unsplash.com/photo-1544816155-12df9643f363?w=800&q=80" alt="Instagram Reel">
+                        </div>
+                        <div class="card-title">Instagram Product Reel</div>
+                        <div class="card-desc">Fast-paced trendy transitions</div>
+                    </div>
+                    <div class="prompt-card" onclick="openModal('https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&q=80', 'Vintage Mountain Tee', 'Retro sun and pines linework', '$2.99', 'T-Shirts')">
+                        <div class="card-image-wrap">
+                            <div class="badge">$2.99</div>
+                            <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&q=80" alt="Vintage Mountain Tee">
+                        </div>
+                        <div class="card-title">Vintage Mountain Tee</div>
+                        <div class="card-desc">Retro sun and pines linework</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="panel-bookmarks" class="dash-panel">
+                <div class="prompts-grid">
+                    <div class="prompt-card" onclick="openModal('https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?w=800&q=80', 'Lifestyle Mockup Scene', 'Coffee shop table top view', '$2.99', 'Mockups')">
+                        <div class="card-image-wrap">
+                            <div class="badge">$2.99</div>
+                            <img src="https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?w=800&q=80" alt="Lifestyle Mockup">
+                            <div class="like-btn liked" onclick="toggleHeart(event)">
+                                <i data-lucide="heart" style="width:14px;height:14px;fill:#000;"></i> <span>42</span>
+                            </div>
+                        </div>
+                        <div class="card-title">Lifestyle Mockup Scene</div>
+                        <div class="card-desc">Coffee shop table top view</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="panel-purchases" class="dash-panel">
+                <div class="purchase-list">
+                    <div class="purchase-item">
+                        <div class="purchase-info">
+                            <div class="purchase-title">Vintage Mountain Tee</div>
+                            <div class="purchase-date">May 6, 2026</div>
+                        </div>
+                        <div class="purchase-price">$2.99</div>
+                    </div>
+                    <div class="purchase-item">
+                        <div class="purchase-info">
+                            <div class="purchase-title">Urban Streetwear Graphic</div>
+                            <div class="purchase-date">April 28, 2026</div>
+                        </div>
+                        <div class="purchase-price">$2.99</div>
+                    </div>
+                    <div class="purchase-item">
+                        <div class="purchase-info">
+                            <div class="purchase-title">Lifestyle Mockup Scene</div>
+                            <div class="purchase-date">April 12, 2026</div>
+                        </div>
+                        <div class="purchase-price">$2.99</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Overlay -->
+    <div id="prompt-modal" class="modal-overlay" onclick="handleModalClick(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeModal()">
+                <i data-lucide="x" style="width:18px;height:18px;"></i>
+            </button>
+            <div class="modal-left">
+                <img id="modal-img" src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&q=80" alt="Preview">
+            </div>
+            <div class="modal-right">
+                <div id="modal-breadcrumb" class="modal-breadcrumb">POD / T-Shirts</div>
+                <h2 id="modal-title" class="modal-title">Vintage Mountain Tee</h2>
+                <div id="modal-desc" class="modal-desc">Retro sun and pines linework</div>
+                
+                <div class="modal-tags">
+                    <div class="modal-tag">ChatGPT</div>
+                    <div id="modal-subcat" class="modal-tag">T-Shirts</div>
+                    <div id="modal-price-tag" class="modal-tag">$2.99</div>
+                </div>
+
+                <div class="prompt-area">
+                    <div class="prompt-visible">Generate a vector line art illustration of a vintage mountain landscape...</div>
+                    <div class="prompt-blurred">with a large sun setting in the background. Incorporate retro pine trees and a subtle distressed texture to give it a 70s apparel aesthetic suitable for DTG printing.</div>
+                    <div class="prompt-lock"><i data-lucide="lock" style="width:16px;height:16px;"></i></div>
+                </div>
+
+                <button id="modal-cta" class="btn-primary" style="width:100%;justify-content:center;padding:14px;border-radius:var(--radius-pill);"></button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize icons
+        lucide.createIcons();
+
+        const pages = ['home', 'subcategory', 'dashboard'];
+        let isUserSignedIn = false;
+
+        function navigate(pageId) {
+            pages.forEach(p => {
+                document.getElementById(`page-${p}`).classList.remove('active');
+            });
+            document.getElementById(`page-${pageId}`).classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        function toggleHeart(e) {
+            e.stopPropagation(); // prevent card click
+            const btn = e.currentTarget;
+            const isLiked = btn.classList.contains('liked');
+            const countSpan = btn.querySelector('span');
+            let count = parseInt(countSpan.innerText);
+            
+            if (isLiked) {
+                btn.classList.remove('liked');
+                countSpan.innerText = count - 1;
+                const icon = btn.querySelector('svg');
+                icon.style.fill = 'none';
+            } else {
+                btn.classList.add('liked');
+                countSpan.innerText = count + 1;
+                const icon = btn.querySelector('svg');
+                icon.style.fill = 'var(--text)';
+            }
+        }
+
+        function openModal(imgUrl, title, desc, price, subcat) {
+            const modal = document.getElementById('prompt-modal');
+            
+            // Populate data
+            document.getElementById('modal-img').src = imgUrl;
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-desc').innerText = desc;
+            document.getElementById('modal-subcat').innerText = subcat;
+            document.getElementById('modal-price-tag').innerText = price === 'FREE' ? 'Free' : price;
+            
+            // Set breadcrumb based on category loosely
+            const isMarketing = ['Social Media', 'Product Photography', 'Ad Creatives'].includes(subcat);
+            document.getElementById('modal-breadcrumb').innerText = `${isMarketing ? 'Marketing' : 'POD'} / ${subcat}`;
+            
+            const btn = document.getElementById('modal-cta');
+            if (price === 'FREE') {
+                btn.innerHTML = 'Copy Prompt <i data-lucide="copy" style="width:16px;height:16px;"></i>';
+            } else {
+                btn.innerHTML = `Unlock for ${price}`;
+            }
+            
+            // Re-init icons for dynamic content
+            lucide.createIcons();
+            
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden'; // prevent scrolling behind modal
+        }
+
+        function closeModal() {
+            document.getElementById('prompt-modal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function handleModalClick(e) {
+            if (e.target === e.currentTarget) {
+                closeModal();
+            }
+        }
+
+        function signIn() {
+            isUserSignedIn = true;
+            document.getElementById('nav-signin').style.display = 'none';
+            document.getElementById('nav-avatar').style.display = 'flex';
+            navigate('dashboard');
+        }
+
+        function switchDashTab(tabId) {
+            // Update tabs
+            document.querySelectorAll('.dash-tab').forEach(t => t.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            
+            // Update panels
+            document.querySelectorAll('.dash-panel').forEach(p => p.classList.remove('active'));
+            document.getElementById(`panel-${tabId}`).classList.add('active');
+        }
+
+        function toggleFilter(e) {
+            document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+            e.currentTarget.classList.add('active');
+        }
+    </script>
+</body>
+</html>

@@ -1,65 +1,61 @@
-import Image from "next/image";
+import { fetchQuery } from "convex/nextjs";
+import { api } from "../../convex/_generated/api";
+import { CategoryGrid } from "@/components/categories/category-grid";
+import { HomepagePrompts } from "@/components/prompts/homepage-prompts";
+import { HeroSection } from "@/components/layout/hero-section";
 
-export default function Home() {
+export const revalidate = 3600;
+
+export default async function HomePage() {
+  const [categories, featuredRaw, freeRaw] = await Promise.all([
+    fetchQuery(api.categories.listAll, {}),
+    fetchQuery(api.prompts.getFeatured, {}),
+    fetchQuery(api.prompts.getFree, {}),
+  ]);
+
+  const withUrls = async (prompts: typeof featuredRaw) =>
+    Promise.all(
+      prompts.map(async (p: (typeof featuredRaw)[number]) => ({
+        ...p,
+        imageUrl: p.imageStorageId
+          ? await fetchQuery(api.prompts.getImageUrl, { storageId: p.imageStorageId })
+          : "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&q=80",
+      }))
+    );
+
+  const [featured, free] = await Promise.all([
+    withUrls(featuredRaw),
+    withUrls(freeRaw),
+  ]);
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
+    <main className="max-w-7xl mx-auto px-6 w-full flex flex-col gap-12">
+      <HeroSection />
+
+      <section>
+        <h2 className="text-lg font-bold tracking-tight text-white mb-6">Browse Categories</h2>
+        <CategoryGrid categories={categories as any} />
+      </section>
+
+      <section>
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-lg font-bold tracking-tight text-white">Featured Prompts</h2>
+          <a href="/search" className="text-sm text-[#666] hover:text-white flex items-center gap-1">
+            View all →
           </a>
         </div>
-      </main>
-    </div>
+        <HomepagePrompts prompts={featured as any} />
+      </section>
+
+      <section>
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-lg font-bold tracking-tight text-white">Free Prompts</h2>
+          <a href="/search?isFree=true" className="text-sm text-[#666] hover:text-white flex items-center gap-1">
+            View all →
+          </a>
+        </div>
+        <HomepagePrompts prompts={free as any} />
+      </section>
+    </main>
   );
 }

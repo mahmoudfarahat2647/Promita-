@@ -88,6 +88,7 @@ src/
 ### Task 1: Install dependencies + configure Vitest
 
 **Files:**
+
 - Modify: `package.json`
 - Create: `vitest.config.ts`
 
@@ -118,6 +119,7 @@ export default defineConfig({
 - [ ] **Add test script to `package.json`**
 
 Open `package.json` and add to `"scripts"`:
+
 ```json
 "test": "vitest"
 ```
@@ -127,6 +129,7 @@ Open `package.json` and add to `"scripts"`:
 ```bash
 npx vitest run
 ```
+
 Expected: `No test files found` (no failures).
 
 - [ ] **Commit**
@@ -141,6 +144,7 @@ git commit -m "chore: add vitest, convex-test, upstash, posthog"
 ### Task 2: Convex schema
 
 **Files:**
+
 - Modify: `convex/schema.ts`
 
 - [ ] **Replace `convex/schema.ts`**
@@ -232,6 +236,7 @@ export default defineSchema({
 ```bash
 npx convex dev --once
 ```
+
 Expected: schema deployed, no errors.
 
 - [ ] **Commit**
@@ -246,6 +251,7 @@ git commit -m "feat(convex): define full data schema"
 ### Task 3: Clerk + Convex auth + providers
 
 **Files:**
+
 - Modify: `convex/auth.config.ts`
 - Create: `src/components/layout/providers.tsx`
 - Modify: `src/app/layout.tsx`
@@ -254,6 +260,7 @@ git commit -m "feat(convex): define full data schema"
 - [ ] **Set required environment variables**
 
 Create `.env.local` at project root (never commit this file):
+
 ```
 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_...
 CLERK_SECRET_KEY=sk_test_...
@@ -378,6 +385,7 @@ npx convex dev --once
 ```bash
 npm run dev
 ```
+
 Open `http://localhost:3000`. No runtime errors in console.
 
 - [ ] **Commit**
@@ -394,6 +402,7 @@ git commit -m "feat: wire Clerk + Convex auth, providers, middleware"
 ### Task 4: Category queries
 
 **Files:**
+
 - Create: `convex/categories.ts`
 - Create: `convex/categories.test.ts`
 
@@ -431,6 +440,7 @@ test("getSubcategoryBySlug returns correct subcategory", async () => {
 ```bash
 npx vitest run convex/categories.test.ts
 ```
+
 Expected: FAIL (categories module not found).
 
 - [ ] **Create `convex/categories.ts`**
@@ -545,6 +555,7 @@ export const seedCategories = mutation({
 ```bash
 npx vitest run convex/categories.test.ts
 ```
+
 Expected: PASS.
 
 - [ ] **Commit**
@@ -559,6 +570,7 @@ git commit -m "feat(convex): category queries + seed mutation"
 ### Task 5: Prompt queries
 
 **Files:**
+
 - Create: `convex/prompts.ts`
 - Create: `convex/prompts.test.ts`
 
@@ -869,6 +881,7 @@ git commit -m "feat(convex): prompt queries + admin mutations"
 ### Task 6: Search, likes, bookmarks, unlocks, purchases, webhook
 
 **Files:**
+
 - Create: `convex/search.ts`
 - Create: `convex/likes.ts`
 - Create: `convex/bookmarks.ts`
@@ -1209,6 +1222,7 @@ test("processGumroadPurchase is idempotent", async () => {
 ```bash
 npx vitest run
 ```
+
 Expected: All PASS.
 
 - [ ] **Deploy all Convex functions**
@@ -1231,6 +1245,7 @@ git commit -m "feat(convex): search, likes, bookmarks, unlocks, purchases, webho
 ### Task 7: Gumroad utils + Upstash + Posthog
 
 **Files:**
+
 - Create: `src/lib/gumroad.ts`
 - Create: `src/lib/upstash.ts`
 - Create: `src/lib/posthog.ts`
@@ -1376,6 +1391,7 @@ git commit -m "feat: gumroad utils, upstash rate limiters, posthog client"
 ### Task 8: Header
 
 **Files:**
+
 - Create: `src/components/layout/header.tsx`
 
 - [ ] **Create `src/components/layout/header.tsx`**
@@ -1444,6 +1460,7 @@ git commit -m "feat(ui): header with logo, search placeholder, Clerk auth"
 ### Task 9: SearchBar + CategoryCard + CategoryGrid
 
 **Files:**
+
 - Create: `src/components/search/search-bar.tsx`
 - Create: `src/components/categories/category-card.tsx`
 - Create: `src/components/categories/category-grid.tsx`
@@ -1588,6 +1605,7 @@ git commit -m "feat(ui): SearchBar, CategoryCard, CategoryGrid"
 ### Task 10: PromptCard + ImageViewer + FilterPills
 
 **Files:**
+
 - Create: `src/components/prompts/prompt-card.tsx`
 - Create: `src/components/prompts/image-viewer.tsx`
 - Create: `src/components/prompts/filter-pills.tsx`
@@ -1789,6 +1807,7 @@ git commit -m "feat(ui): PromptCard, ImageViewer, FilterPills, PromptGrid"
 ### Task 11: PromptModal + LikeButton + UnlockButton
 
 **Files:**
+
 - Create: `src/components/prompts/prompt-modal.tsx`
 - Create: `src/components/prompts/like-button.tsx`
 - Create: `src/components/prompts/unlock-button.tsx`
@@ -2087,6 +2106,7 @@ git commit -m "feat(ui): PromptModal, LikeButton, UnlockButton"
 ### Task 12: Homepage
 
 **Files:**
+
 - Modify: `src/app/page.tsx`
 
 - [ ] **Replace `src/app/page.tsx`**
@@ -2184,6 +2204,7 @@ export function HomepagePrompts({ prompts }: { prompts: PromptCardData[] }) {
 ```bash
 npm run dev
 ```
+
 Open `http://localhost:3000`. Expect: header, category grid (empty until seeded), prompt sections.
 
 - [ ] **Commit**
@@ -2198,6 +2219,7 @@ git commit -m "feat: ISR homepage with categories and prompt sections"
 ### Task 13: Listing page + Individual prompt SEO page
 
 **Files:**
+
 - Create: `src/app/prompts/[category]/[subcategory]/page.tsx`
 - Create: `src/app/prompts/[category]/[subcategory]/[slug]/page.tsx`
 
@@ -2384,6 +2406,7 @@ git commit -m "feat: listing page + individual prompt SEO page (ISR)"
 ### Task 14: Search page + Dashboard
 
 **Files:**
+
 - Create: `src/app/search/page.tsx`
 - Create: `src/app/dashboard/page.tsx`
 - Create: `src/components/dashboard/unlocked-tab.tsx`
@@ -2614,6 +2637,7 @@ git commit -m "feat: search page + dashboard with 3 tabs"
 ### Task 15: Gumroad webhook route + Upstash rate limiting
 
 **Files:**
+
 - Create: `src/app/api/webhook/gumroad/route.ts`
 
 - [ ] **Add `GUMROAD_SELLER_ID` to `.env.local`**
@@ -2690,6 +2714,7 @@ git commit -m "feat: Gumroad webhook route with Upstash rate limiting"
 ### Task 16: Admin layout + PromptForm + AdminPromptsPage
 
 **Files:**
+
 - Create: `src/app/admin/layout.tsx`
 - Create: `src/app/admin/page.tsx`
 - Create: `src/app/admin/prompts/new/page.tsx`
@@ -3070,6 +3095,7 @@ git commit -m "feat: admin layout, prompt form with Convex file upload, prompts 
 ### Task 17: Sitemap + robots + Posthog init
 
 **Files:**
+
 - Create: `src/app/sitemap.ts`
 - Create: `src/app/robots.ts`
 
@@ -3172,6 +3198,7 @@ useEffect(() => {
 ```bash
 npx vitest run
 ```
+
 Expected: All PASS.
 
 - [ ] **Build check**
@@ -3179,6 +3206,7 @@ Expected: All PASS.
 ```bash
 npm run build
 ```
+
 Expected: Build succeeds with no type errors.
 
 - [ ] **Commit**
@@ -3199,6 +3227,7 @@ git commit -m "feat: sitemap, robots.txt, Posthog analytics"
 ```bash
 npx convex run seed:seedCategories
 ```
+
 Expected: 2 categories + 6 subcategories created in Convex dashboard.
 
 - [ ] **Create one test prompt via admin**
