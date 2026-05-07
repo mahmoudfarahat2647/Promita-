@@ -8,12 +8,16 @@ export const listBySubcategory = query({
     paginationOpts: paginationOptsValidator,
   },
   handler: async (ctx, args) => {
-    return ctx.db
+    const result = await ctx.db
       .query("prompts")
       .withIndex("by_subcategoryId_and_published", (q) =>
         q.eq("subcategoryId", args.subcategoryId).eq("isPublished", true)
       )
       .paginate(args.paginationOpts);
+    return {
+      ...result,
+      page: result.page.map(({ promptText: _, ...rest }) => rest),
+    };
   },
 });
 
