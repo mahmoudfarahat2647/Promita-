@@ -19,12 +19,13 @@ import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/compone
 export function PromptModal({ promptId, onClose }: PromptModalProps) {
   const promptData = useQuery(api.prompts.getById, { id: promptId });
   const promptText = useQuery(api.prompts.getPromptText, { promptId });
-  const imageUrl = useQuery(
+  const storageImageUrl = useQuery(
     api.prompts.getImageUrl,
     promptData?.imageStorageId
       ? { storageId: promptData.imageStorageId }
       : "skip"
   );
+  const imageUrl = storageImageUrl ?? promptData?.imageUrl ?? null;
 
   useEffect(() => {
     if (promptData) {

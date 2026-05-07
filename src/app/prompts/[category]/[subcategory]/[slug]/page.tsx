@@ -30,9 +30,9 @@ export default async function PromptPage({ params }: Props) {
   const prompt = await fetchQuery(api.prompts.getBySlug, { slug: resolvedParams.slug });
   if (!prompt) notFound();
 
-  const imageUrl = await fetchQuery(api.prompts.getImageUrl, {
-    storageId: prompt.imageStorageId,
-  });
+  const imageUrl = prompt.imageStorageId
+    ? await fetchQuery(api.prompts.getImageUrl, { storageId: prompt.imageStorageId })
+    : (prompt.imageUrl ?? null);
 
   return (
     <main className="max-w-2xl mx-auto px-6 py-10">

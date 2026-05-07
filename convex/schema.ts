@@ -25,13 +25,15 @@ export default defineSchema({
     promptText: v.string(),
     categoryId: v.id("categories"),
     subcategoryId: v.id("subcategories"),
-    aiTool: v.union(v.literal("chatgpt"), v.literal("gemini")),
+    aiTool: v.union(v.literal("chatgpt"), v.literal("gemini"), v.literal("midjourney")),
     isFree: v.boolean(),
     price: v.number(),
     gumroadProductId: v.optional(v.string()),
-    imageStorageId: v.id("_storage"),
+    imageStorageId: v.optional(v.id("_storage")),
+    imageUrl: v.optional(v.string()),
     likeCount: v.number(),
     isPublished: v.boolean(),
+    isFeatured: v.optional(v.boolean()),
     searchText: v.string(),
   })
     .index("by_slug", ["slug"])

@@ -19,7 +19,7 @@ export default async function HomePage() {
         ...p,
         imageUrl: p.imageStorageId
           ? await fetchQuery(api.prompts.getImageUrl, { storageId: p.imageStorageId })
-          : "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&q=80",
+          : (p.imageUrl ?? "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&q=80"),
       }))
     );
 
